@@ -168,6 +168,9 @@ class GithubClient:
     def get_issue(self, owner: str, repo: str, issue_number: int) -> HttpResponse:
         return self.get(f"/repos/{owner}/{repo}/issues/{issue_number}")
 
+    def get_committer_list(self, owner: str, repo: str) -> HttpResponse:
+        return self.get(f"/repos/{owner}/{repo}/collaborators")
+
     def create_issue_comment(
         self, owner: str, repo: str, issue_number: int, body: str
     ) -> HttpResponse | None:

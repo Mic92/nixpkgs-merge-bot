@@ -20,7 +20,8 @@ class CommitterPR(MergingStrategyTemplate):
         if not result:
             return result, decline_reasons
 
-        allowed_users = list(map(x: x.github, get_package_maintainers(self.settings, "maintainer/maintainer-list.nix").items()))
+        allowed_users = self.github_client.get_committer_list(pull_request.repo_owner, pull_request.repo_name).json()
+        log.debug(allowed_users)
         if pull_request.user_login not in allowed_users:
             result = False
             message = "pr author is not committer"
