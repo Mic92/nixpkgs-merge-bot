@@ -20,7 +20,16 @@ class CommitterPR(MergingStrategyTemplate):
         if not result:
             return result, decline_reasons
 
-        allowed_users = self.github_client.get_committer_list(pull_request.repo_owner, pull_request.repo_name).json()
+        committer_list = self.github_client.get_committer_list(
+            pull_request.repo_owner, pull_request.repo_name
+        )
+
+        allowed_users = [
+            committer["login"]
+            for committer in committer_list
+            if committer["permissions"]["maintain"]
+        ]
+
         log.debug(allowed_users)
         if pull_request.user_login not in allowed_users:
             result = False

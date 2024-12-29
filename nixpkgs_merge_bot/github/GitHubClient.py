@@ -169,7 +169,23 @@ class GithubClient:
         return self.get(f"/repos/{owner}/{repo}/issues/{issue_number}")
 
     def get_committer_list(self, owner: str, repo: str) -> HttpResponse:
-        return self.get(f"/repos/{owner}/{repo}/collaborators")
+        per_page = 100
+        number_of_page = 1
+        page = self.get(
+            f"/repos/{owner}/{repo}/collaborators?page={number_of_page}&per_page={per_page}"
+        ).json()
+        result = [] + page
+        while len(page) < per_page:
+            number_of_page = number_of_page + 1
+            page = self.get(
+                f"/repos/{owner}/{repo}/collaborators?page={number_of_page}&per_page={per_page}"
+            ).json()
+            result = result + page
+        return result
+
+        self.get(
+            f"/repos/{owner}/{repo}/collaborators?page={page}&per_page={per_page}"
+        ).json()
 
     def create_issue_comment(
         self, owner: str, repo: str, issue_number: int, body: str

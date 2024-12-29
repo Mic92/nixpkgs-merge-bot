@@ -5,8 +5,8 @@ from ..database import Database
 from ..github.GitHubClient import GithubClient, GithubClientError, get_github_client
 from ..github.Issue import IssueComment
 from ..github.PullRequest import PullRequest
+from ..merging_strategies.committer_pr import CommitterPR
 from ..merging_strategies.maintainer_update import MaintainerUpdate
-from ..merging_strategies.committer import CommitterPR
 from ..settings import Settings
 from ..webhook.http_response import HttpResponse
 from ..webhook.utils.issue_response import issue_response
@@ -82,7 +82,7 @@ def merge_command(issue_comment: IssueComment, settings: Settings) -> HttpRespon
     # Setup for this comment is done we ensured that this is address to us and we have a command
 
     log.info(f"{issue_comment.issue_number }: Checking meragability")
-    merge_stragies = [MaintainerUpdate(client, settings), CommitterPR(client,settings)]
+    merge_stragies = [MaintainerUpdate(client, settings), CommitterPR(client, settings)]
 
     one_merge_strategy_passed = False
     decline_reasons = []
