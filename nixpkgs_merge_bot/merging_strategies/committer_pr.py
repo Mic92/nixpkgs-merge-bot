@@ -21,7 +21,7 @@ class CommitterPR(MergingStrategyTemplate):
             return result, decline_reasons
 
         committer_list = self.github_client.get_committer_list(
-            pull_request.repo_owner, pull_request.repo_name
+            pull_request.repo_owner, self.settings.committer_team_slug
         )
 
         allowed_users = [
